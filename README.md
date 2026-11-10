@@ -83,7 +83,7 @@ Analytics come from this app's sessions, not physical WiFi telemetry. A browser 
 Edit `.env` and restart the server after changes. Default coordinates are a Kuala Lumpur reference point; **Taman Harmoni is fictional**. SITE_NAME, SITE_LAT and SITE_LON can be replaced with chosen test site. The default feed is Prasarana rapid-bus-kl, filtered to 15 km. TRANSIT_RADIUS_KM can be increased for wider coverage.
 
 | Integration | Implementation | Credentials |
-|---|---|---|
+| --- | --- | --- |
 | Malaysian GTFS Static | Downloads and parses ZIP, calendar exceptions, routes, stops and stop times; shows upcoming scheduled departures for five nearby stops | None |
 | Malaysian GTFS Realtime | Decodes protobuf vehicle observations; shows coordinates, route, age and distance | None |
 | Open-Meteo | Current model temperature, humidity and weather code | None for the relevant non-commercial API use |
