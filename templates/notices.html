@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}{% for n in notices %}<article><p class="meta">{{n.category}} · {{n.publisher}}</p><h2><a href="/notice/{{n.id}}">{{n.title}}</a></h2><p>{{n.body[:200]}}</p><small>Updated {{n.updated|date}} · Expires {{n.expires|date}}</small></article>{% else %}<p>No current notices. Please check again later.</p>{% endfor %}{% endblock %}

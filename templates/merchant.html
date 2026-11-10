@@ -1,0 +1,134 @@
+{% extends 'base.html' %}{% block content %}
+<div class="session">
+  <p>{{claimed}} vouchers claimed</p>
+  <p>{{redeemed}} vouchers redeemed</p>
+</div>
+<h2>Validate a voucher</h2>
+
+<p>
+  Scan the customer's QR code or enter their voucher code.
+  Review the result before confirming redemption.
+</p>
+
+<div class="scanner-panel">
+  <button type="button" id="open-voucher-scanner">
+    Open QR scanner
+  </button>
+
+  <p id="scanner-message" role="status">
+    Camera scanning and image scanning are available.
+  </p>
+
+  <div id="voucher-reader"></div>
+</div>
+
+<form method="post" class="inline" id="voucher-check-form">
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+
+  <label for="voucher-code-input">
+    Voucher code
+    <input
+      id="voucher-code-input"
+      name="code"
+      required
+      maxlength="15"
+      pattern="KC-[0-9A-Fa-f]{12}"
+      title="Enter KC- followed by 12 letters or numbers from the voucher."
+      placeholder="KC-123456ABCDEF"
+      autocomplete="off"
+      spellcheck="false"
+      value="{{ v.code if v else '' }}"
+    >
+  </label>
+
+  <button type="submit">Check voucher</button>
+</form>
+
+<script
+  src="{{ url_for('static', filename='vendor/html5-qrcode.min.js') }}"
+  defer
+></script>
+
+<script
+  src="{{ url_for('static', filename='merchant-scanner.js') }}"
+  defer
+></script>
+{% if v %}
+<article>
+  <h2>{{v.title}}</h2>
+  <p>{{v.terms}}</p>
+  <p>Expires {{v.expires|date}}</p>
+  {% if v.redeemed %}
+  <p>Already redeemed {{v.redeemed|date}}</p>
+  {% elif v.expires<=now %}
+  <p>Expired — cannot redeem.</p>
+  {% else %}
+  <p>Valid for Kopi Corner.</p>
+  <form method="post">
+    <input type="hidden" name="csrf" value="{{csrf}}" /><input
+      type="hidden"
+      name="code"
+      value="{{v.code}}"
+    /><input type="hidden" name="action" value="redeem" /><button>
+      Confirm redemption
+    </button>
+  </form>
+  {% endif %}
+</article>
+{% endif %}
+<h2>Active and past rewards</h2>
+{% for r in rewards %}
+<article>
+  <h3>{{r.title}}</h3>
+  <p>{{r.cost}} points · {{r.stock}} available · Expires {{r.expires|date}}</p>
+  <p>{{r.terms}}</p>
+</article>
+{% endfor %}
+<h2>Award purchase points</h2>
+<p>
+  Confirm a purchase before issuing points. Each receipt may be credited once.
+</p>
+<form method="post" action="/merchant/award" class="form">
+  <input type="hidden" name="csrf" value="{{csrf}}" /><label
+    >Member ID<input type="number" name="member" min="1" required /></label
+  ><label>Receipt reference<input name="receipt" required /></label
+  ><label
+    >Points (maximum 100)<input
+      name="points"
+      type="number"
+      min="1"
+      max="100"
+      value="10"
+      required /></label
+  ><button>Award points</button>
+</form>
+<h2>Create reward</h2>
+<form method="post" action="/merchant/reward" class="form">
+  <input type="hidden" name="csrf" value="{{csrf}}" /><label
+    >Title<input name="title" required /></label
+  ><label
+    >Points cost<input
+      name="cost"
+      type="number"
+      min="1"
+      value="80"
+      required /></label
+  ><label
+    >Available quantity<input
+      name="stock"
+      type="number"
+      min="0"
+      value="20"
+      required /></label
+  ><label
+    >Valid for days<input
+      name="days"
+      type="number"
+      min="1"
+      max="365"
+      value="30"
+      required /></label
+  ><label>Conditions<textarea name="terms" required></textarea></label
+  ><button>Create reward</button>
+</form>
+{% endblock %}

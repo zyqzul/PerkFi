@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% set state = 'redeemed' if v.redeemed else 'expired' if expired else 'ready' %}
+
+<article
+  class="voucher"
+  id="voucher-card"
+  data-state="{{ state }}"
+  data-status-url="{{ url_for('voucher_status', code=v.code) }}"
+>
+  <p>Kopi Corner</p>
+  <h2>{{ v.title }}</h2>
+
+  <p class="badge" id="voucher-state">
+    {{ 'Redeemed' if state == 'redeemed'
+       else 'Expired' if state == 'expired'
+       else 'Ready to use' }}
+  </p>
+
+  {% if state == 'ready' %}
+    <div id="voucher-presentation">
+      <img
+        class="voucher-qr"
+        src="{{ url_for('voucher_qr', code=v.code) }}"
+        alt="Voucher QR code for staff to scan"
+        width="260"
+        height="260"
+      >
+
+      <p>
+        <code class="voucher-code">{{ v.code }}</code>
+      </p>
+
+      <p>
+        Show this QR code to staff. They will check your voucher
+        and confirm redemption.
+      </p>
+
+      <p>If scanning is unavailable, staff can enter the code above.</p>
+    </div>
+
+    <p id="voucher-sync" class="muted" role="status">
+      Checking voucher status…
+    </p>
+  {% else %}
+    <p><code class="voucher-code">{{ v.code }}</code></p>
+  {% endif %}
+
+  <p>{{ v.terms }}</p>
+  <p>Expires {{ v.expires|date }}</p>
+
+  {% if v.redeemed %}
+    <p>Redeemed {{ v.redeemed|date }}</p>
+  {% elif expired %}
+    <p>This voucher has expired and cannot be redeemed.</p>
+  {% endif %}
+</article>
+
+<a href="{{ url_for('account') }}">Back to my vouchers</a>
+
+{% if state == 'ready' %}
+  <script
+    src="{{ url_for('static', filename='voucher-status.js') }}"
+    defer
+  ></script>
+{% endif %}
+{% endblock %}
