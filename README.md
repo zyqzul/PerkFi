@@ -2,6 +2,74 @@
 
 A Python/Flask + SQLite implementation of the core PerkFi journeys, with responsive server-rendered HTML.
 
+## Screenshots
+
+<p align="center">
+  <img src="./docs/screenshots/welcome.png" alt="Welcome Page" width="600">
+  <br>
+  <em>Welcome Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/home.png" alt="Home Page" width="600">
+  <br>
+  <em>Home Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/explore.png" alt="Explore Page" width="600">
+  <br>
+  <em>Explore Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/notices.png" alt="Notices Page" width="600">
+  <br>
+  <em>Notices Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/transport.png" alt="Transport Page" width="600">
+  <br>
+  <em>Transport Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/rewards.png" alt="Rewards Page" width="600">
+  <br>
+  <em>Rewards Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/voucher.png" alt="Voucher Page" width="600">
+  <br>
+  <em>Voucher Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/qr-voucher.png" alt="QR voucher" width="600">
+  <br>
+  <em>QR voucher.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/account.png" alt="Account Page" width="600">
+  <br>
+  <em>Account Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/merchant.png" alt="Merchant Page" width="600">
+  <br>
+  <em>Merchant Page.</em>
+</p>
+<br>
+<p align="center">
+  <img src="./docs/screenshots/operator.png" alt="Operator Page" width="600">
+  <br>
+  <em>Operator Page.</em>
+</p>
+
 ## Setting up
 
 Open Terminal > New Terminal (PowerShell), and run each command separately:
@@ -25,7 +93,7 @@ Re-running init-db preserves the database and does not reset staff passwords. To
 .\.venv\Scripts\python.exe -m flask --app app reset-staff
 ```
 
-## 2. Run
+## Run
 
 ```powershell
 .\.venv\Scripts\python.exe app.py
@@ -33,7 +101,7 @@ Re-running init-db preserves the database and does not reset staff passwords. To
 
 Open http://127.0.0.1:5000. Keep the terminal running. Ctrl+C to stop the server. Records persist in `instance/perkfi.db`.
 
-## 3. Test guest access
+## Test guest access
 
 1. Open `/`.
 2. Accept the access terms and select **Start free access session**.
@@ -41,7 +109,7 @@ Open http://127.0.0.1:5000. Keep the terminal running. Ctrl+C to stop the server
 4. Browse Explore, notice details and transport.
 5. Select End session and confirm the state changes.
 
-## 4. Test membership and rewards
+## Test membership and rewards
 
 1. Select Sign in and enter an email or phone in international format.
 2. The default `OTP_MODE=console` prints the code in the terminal.
@@ -51,7 +119,7 @@ Open http://127.0.0.1:5000. Keep the terminal running. Ctrl+C to stop the server
 6. View Account for the points ledger and voucher history.
 7. After one minute in an active access session, water Sprout. Watering is capped at once per Malaysian calendar day.
 
-## 5. Test merchant workflow
+## Test merchant workflow
 
 Use a separate browser profile/private window to keep the member session open.
 
@@ -67,7 +135,7 @@ Use a separate browser profile/private window to keep the member session open.
 
 The prototype uses voucher-code entry. Camera scanning and QR generation have been implemented for prompt entry. Points for purchases are confirmed manually by staff; there is no POS integration.
 
-## 6. Test operator workflow
+## Test operator workflow
 
 1. Sign in at `/staff` as operator@perkfi.local.
 2. Create a notice with a future Malaysia-time expiry; leave Publish unchecked to save a draft.
@@ -78,7 +146,7 @@ The prototype uses voucher-code entry. Camera scanning and QR generation have be
 
 Analytics come from this app's sessions, not physical WiFi telemetry. A browser that closes without End session remains active until timeout. Zero means no recorded session starts, not proof of zero visitors.
 
-## 7. APIs and configuration
+## APIs and configuration
 
 Edit `.env` and restart the server after changes. Default coordinates are a Kuala Lumpur reference point; **Taman Harmoni is fictional**. SITE_NAME, SITE_LAT and SITE_LON can be replaced with chosen test site. The default feed is Prasarana rapid-bus-kl, filtered to 15 km. TRANSIT_RADIUS_KM can be increased for wider coverage.
 
@@ -110,7 +178,7 @@ For email, set `OTP_MODE=live` plus SMTP_HOST, SMTP_PORT, SMTP_FROM, SMTP_USER a
 
 For phone numbers, live mode requires TWILIO_SID, TWILIO_TOKEN and TWILIO_FROM. Provider account restrictions and charges apply. If credentials are absent or delivery fails, the app shows a delivery error.
 
-## 8. Run tests
+## Run tests
 
 Stop the app or use a second terminal:
 
@@ -120,7 +188,7 @@ Stop the app or use a second terminal:
 
 Tests use temporary databases. They cover key route rendering, role permissions, voucher ownership, idempotent claims, single-use redemption, expired rewards, CSRF, session reuse, draft visibility and API failure handling.
 
-## 9. File map
+## File map
 
 - app.py: routes, session access, authentication, database transactions and staff actions.
 - integrations.py: external API clients, caching, GTFS decoding and schedule filtering.
@@ -131,7 +199,7 @@ Tests use temporary databases. They cover key route rendering, role permissions,
 - .env.example: non-secret configuration template.
 - instance/: generated local database and session secret; excluded from Git.
 
-## 10. Git checkpoint
+## Versioning (git)
 
 After the app runs and tests pass, initialise a local repository if this folder is not already tracked:
 
@@ -144,7 +212,7 @@ git commit -m "Build PerkFi local portal prototype" # or any suitable message
 
 Confirm .env, instance/ and .venv/ are excluded before committing. No remote repository is created by these commands.
 
-## 11. Current scope and next iterations
+## Current scope and future implementation
 
 Implemented in source: guest sessions, optional email/phone code flow, role-based staff login, notices/drafts/expiry, local directory, live-source adapters, merchant-specific ledger, transactional claims, voucher ownership checks, camera/QR flow, single-use redemption, staff-issued purchase points, capped Sprout growth, preferences, hourly reports, heatmap and CSV export.
 
