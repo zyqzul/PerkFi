@@ -1,1 +1,47 @@
-{% extends 'base.html' %}{% block content %}<div class="session"><div><strong>{{'Portal session active' if active else 'Browse as a guest'}}</strong><p>{{('Session expires '+(visit.expires|date)) if active else 'Start an access session whenever you are ready.'}}</p></div>{% if active %}<form method="post" action="/disconnect"><input type="hidden" name="csrf" value="{{csrf}}"><button class="secondary">End session</button></form>{% else %}<a class="button" href="/">Start session</a>{% endif %}</div><div class="columns"><section><h2>Community notice board</h2>{% for n in notices %}<article><p class="meta">{{n.category}} · {{n.publisher}}</p><h3><a href="/notice/{{n.id}}">{{n.title}}</a></h3><p>{{n.body[:220]}}</p><small>Updated {{n.updated|date}}</small></article>{% else %}<p>No active notices.</p>{% endfor %}</section><aside><h2>Make the most of your visit</h2><a class="tile" href="/transport">Check transport and weather →</a><a class="tile" href="/explore">Find places and events →</a><a class="tile" href="/rewards">Explore optional rewards →</a><p class="meta">Directory and initial notices contain clearly identified sample content. External feeds use the configured reference location.</p></aside></div>{% endblock %}
+{% extends 'base.html' %}{% block content %}
+<div class="session">
+  <div>
+    <strong
+      >{{'Portal session active' if active else 'Browse as a guest'}}</strong
+    >
+    <p>
+      {{('Session expires '+(visit.expires|date)) if active else 'Start an
+      access session whenever you are ready.'}}
+    </p>
+  </div>
+  {% if active %}
+  <form method="post" action="/disconnect">
+    <input type="hidden" name="csrf" value="{{csrf}}" /><button
+      class="secondary"
+    >
+      End session
+    </button>
+  </form>
+  {% else %}<a class="button" href="/">Start session</a>{% endif %}
+</div>
+<div class="columns">
+  <section>
+    <h2>Community notice board</h2>
+    {% for n in notices %}
+    <article>
+      <p class="meta">{{n.category}} · {{n.publisher}}</p>
+      <h3><a href="/notice/{{n.id}}">{{n.title}}</a></h3>
+      <p>{{n.body[:220]}}</p>
+      <small>Updated {{n.updated|date}}</small>
+    </article>
+    {% else %}
+    <p>No active notices.</p>
+    {% endfor %}
+  </section>
+  <aside>
+    <h2>Make the most of your visit</h2>
+    <a class="tile" href="/transport">Check transport and weather →</a
+    ><a class="tile" href="/explore">Find places and events →</a
+    ><a class="tile" href="/rewards">Explore optional rewards →</a>
+    <p class="meta">
+      Directory and initial notices contain clearly identified sample content.
+      External feeds use the configured reference location.
+    </p>
+  </aside>
+</div>
+{% endblock %}
